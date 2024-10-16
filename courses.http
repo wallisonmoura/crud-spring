@@ -1,0 +1,22 @@
+GET http://localhost:8080/api/courses
+###
+
+GET http://localhost:8080/api/courses/2
+###
+
+POST http://localhost:8080/api/courses
+Content-Type: application/json
+
+{
+  "name": "Node",
+  "category": "Back-end"
+}
+###
+
+PUT http://localhost:8080/api/courses/3
+Content-Type: application/json
+
+{
+  "name": "Node",
+  "category": "Back-end"
+}
