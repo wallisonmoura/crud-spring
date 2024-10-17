@@ -8,7 +8,7 @@ POST http://localhost:8080/api/courses
 Content-Type: application/json
 
 {
-  "name": "Node",
+  "name": "Nodejs",
   "category": "Back-end"
 }
 ###
@@ -20,3 +20,6 @@ Content-Type: application/json
   "name": "Node",
   "category": "Back-end"
 }
+###
+
+DELETE http://localhost:8080/api/courses/4
