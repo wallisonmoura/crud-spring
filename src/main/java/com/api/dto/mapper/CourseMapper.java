@@ -14,7 +14,7 @@ public class CourseMapper {
       return null;
     }
 
-    return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue());
+    return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue(), course.getLessons());
   }
 
   public Course toEntity(CourseDTO courseDTO) {
