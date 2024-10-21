@@ -9,7 +9,11 @@ Content-Type: application/json
 
 {
   "name": "Nodejs",
-  "category": "Back-end"
+  "category": "Back-end",
+  "lessons": [{
+    "name": "introdução",
+    "youtubeUrl": "1234567890"
+  }]
 }
 ###
 
