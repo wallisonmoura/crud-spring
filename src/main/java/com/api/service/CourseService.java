@@ -3,18 +3,23 @@ package com.api.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import com.api.dto.CourseDTO;
+import com.api.dto.CoursePageDTO;
 import com.api.dto.mapper.CourseMapper;
 import com.api.exception.RecordNotFoundException;
 import com.api.model.Course;
 import com.api.repository.CourseRepository;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 
 @Validated
 @Service
@@ -28,9 +33,10 @@ public class CourseService {
     this.courseMapper = courseMapper;
   }
 
-  public List<CourseDTO> list() {
-    return courseRepository.findAll().stream().map(courseMapper::toDTO)
-        .collect(Collectors.toList());
+  public CoursePageDTO list(@PositiveOrZero int page, @Positive @Max(100) int pageSize) {
+    Page<Course> pageCourse = courseRepository.findAll(PageRequest.of(page, pageSize));
+    List<CourseDTO> courses = pageCourse.get().map(courseMapper::toDTO).collect(Collectors.toList());
+    return new CoursePageDTO(courses, pageCourse.getTotalElements(), pageCourse.getTotalPages());
   }
 
   public CourseDTO findById(@NotNull @Positive Long id) {
