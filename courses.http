@@ -8,12 +8,18 @@ POST http://localhost:8080/api/courses
 Content-Type: application/json
 
 {
-  "name": "Nodejs",
-  "category": "Back-end",
-  "lessons": [{
-    "name": "introdução",
-    "youtubeUrl": "1234567890"
-  }]
+  "name": "Angular",
+    "category": "Front-end",
+    "lessons": [
+        {
+          "name": "Introdução",
+          "youtubeUrl": "tPOMG0D57S0"
+        },
+        {
+          "name": "Introdução2",
+          "youtubeUrl": "tPOMG0D57S0"
+        }
+    ]
 }
 ###
 
