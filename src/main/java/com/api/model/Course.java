@@ -1,17 +1,16 @@
 package com.api.model;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.validator.constraints.Length;
 
 import com.api.enums.Category;
 import com.api.enums.Status;
 import com.api.enums.converters.CategoryConverter;
 import com.api.enums.converters.StatusConverter;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -21,25 +20,25 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
+@SQLDelete(sql = "UPDATE Course SET status = 'Inactive' WHERE id=?")
+@SQLRestriction("status <> 'Inactive'")
 @Entity
-@SQLDelete(sql = "UPDATE Course SET status = 'Inativo' WHERE id = ?")
-@Where(clause = "status = 'Ativo'")
 public class Course {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  @JsonProperty("_id")
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @NotBlank
   @NotNull
-  @Length(min = 4, max = 100)
-  @Column(length = 100, nullable = false)
+  @Length(min = 5, max = 200)
+  @Column(length = 200, nullable = false)
   private String name;
 
   @NotNull
@@ -48,15 +47,16 @@ public class Course {
   private Category category;
 
   @NotNull
-  @Column(length = 10, nullable = false)
+  @Column(length = 8, nullable = false)
   @Convert(converter = StatusConverter.class)
   private Status status = Status.ACTIVE;
 
   @NotNull
   @NotEmpty
   @Valid
-  @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "course")
-  private List<Lesson> lessons = new ArrayList<>();
+  @OneToMany(mappedBy = "course", cascade = CascadeType.ALL, orphanRemoval = true)
+  @OrderBy("id")
+  private Set<Lesson> lessons = new HashSet<>();
 
   public Long getId() {
     return id;
@@ -90,12 +90,32 @@ public class Course {
     this.status = status;
   }
 
-  public List<Lesson> getLessons() {
+  public Set<Lesson> getLessons() {
     return lessons;
   }
 
-  public void setLessons(List<Lesson> lessons) {
-    this.lessons = lessons;
+  public void setLessons(Set<Lesson> lessons) {
+    if (lessons == null) {
+      throw new IllegalArgumentException("Lessons cannot be null.");
+    }
+    this.lessons.clear();
+    this.lessons.addAll(lessons);
+  }
+
+  public void addLesson(Lesson lesson) {
+    if (lesson == null) {
+      throw new IllegalArgumentException("Lesson cannot be null.");
+    }
+    lesson.setCourse(this);
+    this.lessons.add(lesson);
+  }
+
+  public void removeLesson(Lesson lesson) {
+    if (lesson == null) {
+      throw new IllegalArgumentException("Lesson cannot be null.");
+    }
+    lesson.setCourse(null);
+    this.lessons.remove(lesson);
   }
 
 }

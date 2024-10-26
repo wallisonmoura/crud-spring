@@ -6,7 +6,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 public record LessonDTO(
-    Long id,
+    int _id,
     @NotNull @NotBlank @Length(min = 5, max = 100) String name,
     @NotNull @NotBlank @Length(min = 10, max = 11) String youtubeUrl) {
 }

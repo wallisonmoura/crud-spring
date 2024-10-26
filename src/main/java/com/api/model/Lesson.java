@@ -12,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OrderBy;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -19,8 +20,8 @@ import jakarta.validation.constraints.NotNull;
 public class Lesson {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private Long id;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private int id;
 
   @NotNull
   @NotBlank
@@ -34,17 +35,17 @@ public class Lesson {
   @Column(length = 11, nullable = false)
   private String youtubeUrl;
 
-  @NotNull
   @ManyToOne(fetch = FetchType.LAZY, optional = false)
+  @OrderBy("id ASC")
   @JoinColumn(name = "course_id", nullable = false)
   @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
   private Course course;
 
-  public Long getId() {
+  public int getId() {
     return id;
   }
 
-  public void setId(Long id) {
+  public void setId(int id) {
     this.id = id;
   }
 
@@ -73,11 +74,28 @@ public class Lesson {
   }
 
   @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    Lesson lesson = (Lesson) obj;
+    return id == lesson.id && name.equals(lesson.name) && youtubeUrl.equals(lesson.youtubeUrl);
+  }
+
+  @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
     builder.append("Lesson [id=").append(id).append(", name=").append(name).append(", youtubeUrl=")
         .append(youtubeUrl).append(", course=").append(course).append("]");
     return builder.toString();
+  }
+
+  @Override
+  public int hashCode() {
+    return 31 * id + name.hashCode() + youtubeUrl.hashCode();
   }
 
 }
