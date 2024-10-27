@@ -1,4 +1,4 @@
-package com.api;
+package com.api.course;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -34,7 +34,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.api.config.ValidationAdvice;
 import com.api.controller.CourseController;
-import com.api.course.TestData;
 import com.api.dto.CourseDTO;
 import com.api.dto.CoursePageDTO;
 import com.api.dto.CourseRequestDTO;
