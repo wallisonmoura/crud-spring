@@ -31,7 +31,17 @@ Content-Type: application/json
 
 {
   "name": "Node",
-  "category": "Back-end"
+  "category": "Back-end",
+   "lessons": [
+        {
+          "name": "Introdução",
+          "youtubeUrl": "tPOMG0D57S0"
+        },
+        {
+          "name": "Introdução2",
+          "youtubeUrl": "tPOMG0D57S0"
+        }
+    ]
 }
 ###
 
